@@ -9,6 +9,7 @@ app.use(express.json());
 
 
 app.use("/", require("./routes/home"));
+app.use("/api/user", require("./routes/userRouter"));
 app.use("/api", require("./routes/productRouter"));
 
 

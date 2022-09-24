@@ -16,24 +16,35 @@ class APIfeatures {
         return this;
     }
 
-
-
     filter() {
-        let querycopy = { ...this.querystring }
+        const querycopy = { ...this.querystring }
         const removeItems = ["keyword", "page", "limit"];
         removeItems.forEach(elem => {
             delete querycopy[elem]
         })
 
-        // filter for price and rating;
+        // filter for price
         if (this.querystring.price) {
             const [lp, gp] = this.querystring.price.split("_");
             querycopy.price = { $gte: lp, $lte: gp }
         }
 
+        //filter for rating
+        if (this.querystring.rating) {
+            querycopy.rating = this.querystring.rating;
+        }
+
         this.query = this.query.find(querycopy)
         return this;
     }
+
+    pagination(itemsperpage) {
+        const currentpage = parseInt(this.querystring.currentpage) || 1;
+        const skip = (currentpage - 1) * itemsperpage;
+        this.query = this.query.limit(itemsperpage).skip(skip);
+        return this;
+    }
+
 }
 
 module.exports = APIfeatures;

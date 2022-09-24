@@ -7,20 +7,20 @@ const APIfeatures = require("../utils/apifeatures");
 
 // Create product  ----> Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
-    const product = await Product.create(req.body)
+    const product = await Product.create(req.body);
     res.status(201).json({ success: true, message: "product created successfully", product })
 })
 
 
 // Get product
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
-    const apifeature = new APIfeatures(Product.find(), req.query).search().filter();
-    // const apifeature = new APIfeatures(Product.find(), req.query).filter();
+    const itemsperpage = 3;
+    const apifeature = new APIfeatures(Product.find(), req.query)
+        .search()
+        .filter()
+        .pagination(itemsperpage);
 
-    let product = await apifeature.query;
-    // product = await product.query;
-    // console.log(product)
-    // product = await searchUtil.filter();
+    const product = await apifeature.query;
     if (product.length > 0) {
         res.status(200).json({ success: true, products: product });
     } else {

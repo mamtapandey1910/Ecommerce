@@ -6,6 +6,7 @@ errors = ((err, req, res, next) => {
         const invalidError = new ErrorHandler(400, `Resouce not found, invalid ${err.path}`);
         return res.status(invalidError.statuscode).json({ success: false, message: invalidError.message, error: err.stack })
     }
+    console.log(err.statuscode, err.message)
     res.status(err.statuscode || 500).json({ success: false, message: err.message, error: err.stack })
 })
 
