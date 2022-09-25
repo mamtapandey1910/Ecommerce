@@ -39,8 +39,7 @@ const userSchema = new Schema({
     },
     phoneNumber: {
         type: Number,
-        required: [true, "Please enter Phone Number"],
-        unique: [true, "Phone number already exists"]
+        required: [true, "Please enter Phone Number"]
     },
     date: {
         type: Date,
@@ -54,6 +53,7 @@ const userSchema = new Schema({
 
 userSchema.pre("save", async function (next) {
     if (this.isModified("password")) {
+        console.log("user pre function")
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
     }
@@ -61,9 +61,9 @@ userSchema.pre("save", async function (next) {
 })
 
 
-userSchema.methods.getJWTToken = async function () {
+userSchema.methods.getJWTToken = function () {
     const token = jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
-    console.log("token", token)
+    console.log("user token functipn", token)
     return token;
 }
 

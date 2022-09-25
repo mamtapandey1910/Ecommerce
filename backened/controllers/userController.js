@@ -3,14 +3,14 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
+const sendToken = require("../utils/sendToken");
 
 
 // user Registration
 exports.userRegistration = catchAsyncErrors(async (req, res, next) => {
-    console.log("checking next")
+    console.log("user registration")
     const createduser = await User.create(req.body)
-    const token = await createduser.getJWTToken();
-    res.status(201).json({ success: true, message: "user created", token });
+    sendToken(createduser, 201, res);
 });
 
 
@@ -29,9 +29,7 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
     }
     // send jwt token on login
     const flag = await bcrypt.compare(password, user.password);
-    console.log(flag)
     if (flag) {
-        const token = await user.getJWTToken();
-        res.status(200).json({ success: true, message: "you have loggedIn succesfully", token });
+        sendToken(user, 200, res);
     }
 })

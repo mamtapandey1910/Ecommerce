@@ -1,5 +1,4 @@
 const express = require("express");
-const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const { userRegistration, userLogin } = require("../controllers/userController");
 const Router = express.Router();
 
