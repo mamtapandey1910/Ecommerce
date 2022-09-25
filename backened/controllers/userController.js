@@ -16,7 +16,7 @@ exports.userRegistration = catchAsyncErrors(async (req, res, next) => {
 
 
 // User login
-exports.userLogin = async (req, res, next) => {
+exports.userLogin = catchAsyncErrors(async (req, res, next) => {
     const { email, password } = req.body
     // validate if email exists
     if (!email || !password) {
@@ -31,7 +31,7 @@ exports.userLogin = async (req, res, next) => {
     const flag = await bcrypt.compare(password, user.password);
     console.log(flag)
     if (flag) {
-        const token = user.getJWTToken();
+        const token = await user.getJWTToken();
         res.status(200).json({ success: true, message: "you have loggedIn succesfully", token });
     }
-}
+})
