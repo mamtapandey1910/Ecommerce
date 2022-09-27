@@ -4,11 +4,11 @@ const bcrypt = require("bcryptjs");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/sendToken");
+const { response } = require("express");
 
 
 // user Registration
 exports.userRegistration = catchAsyncErrors(async (req, res, next) => {
-    console.log("user registration")
     const createduser = await User.create(req.body)
     sendToken(createduser, 201, res);
 });
@@ -32,4 +32,19 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
     if (flag) {
         sendToken(user, 200, res);
     }
+});
+
+
+exports.userLogout = catchAsyncErrors(async (req, res, next) => {
+    res.cookie("token", null, {
+        expires: new Date(Date.now()),
+        HttpOnly: true
+    })
+
+    const token = req.header("token")
+    res.status(200).json({
+        success: true,
+        message: "Logged Out successfully"
+    })
+
 })
