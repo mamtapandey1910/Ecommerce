@@ -18,5 +18,4 @@ app.use("/api", require("./routes/productRouter"));
 // middleware
 app.use(errorMiddleware);
 
-
 module.exports = app;

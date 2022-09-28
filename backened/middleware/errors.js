@@ -11,8 +11,12 @@ errors = ((err, req, res, next) => {
         err.statuscode = 400
     }
 
+    if (err.name === "JsonWebTokenError") {
+        return new ErrorHandler(400, "Json Web Token is invalid")
+    }
+
     if (err.code === 11000) {
-        const duplicateError = new ErrorHandler(409, "User already exists")
+        const duplicateError = new ErrorHandler(400, "User already exists")
         return res.status(duplicateError.statuscode).json({ success: false, message: duplicateError.message, error: err.stack })
     }
 

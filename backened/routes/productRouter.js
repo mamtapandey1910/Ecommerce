@@ -5,10 +5,10 @@ const authorizeAdmin = require("../middleware/authorizeAdmin");
 const express = require("express");
 const Router = express.Router();
 
-Router.get("/products", authentication, authorizeAdmin("admin"), getAllProducts);
-Router.post("/products/new", createProduct);
-Router.put("/products/:id", updateProduct);
-Router.delete("/products/:id", deleteProduct);
+Router.get("/products", getAllProducts);
+Router.post("/products/new", authentication, authorizeAdmin("admin"), createProduct);
+Router.put("/products/:id", authentication, authorizeAdmin("admin"), updateProduct);
+Router.delete("/products/:id", authentication, authorizeAdmin("admin"), deleteProduct);
 Router.get("/products/:id", getProductDetails);
 
 module.exports = Router;
